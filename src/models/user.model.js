@@ -26,9 +26,40 @@ const userSchema = new Schema(
       enum: ["user", "admin"],
       default: "user",
     },
+    profile: [profileSchema],
+  },
+
+  {
+    versionKey: false,
+    timestamps: true,
+  },
+);
+
+const profileSchema = new Schema(
+  {
+    firstName: {
+      type: String,
+      required: true,
+      minlength: 2,
+      maxlength: 20,
+    },
+    lastName: {
+      type: String,
+      required: true,
+      minlength: 2,
+      maxlength: 20,
+    },
+    birthDate: {
+      type: Date,
+      default: Date.now,
+    },
+    phone: {
+      type: String,
+    },
   },
   {
     versionKey: false,
+    timestamps: true,
   },
 );
 
