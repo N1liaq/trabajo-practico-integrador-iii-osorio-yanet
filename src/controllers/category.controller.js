@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { CategoryModel } from "../models/category.model.js";
+import { EventModel } from "../models/event.model.js";
 
 export const createCategory = async (req, res) => {
   try {
@@ -83,7 +84,11 @@ export const deleteCategory = async (req, res) => {
       return res.status(404).json({ msg: "Category no encontrado." });
     }
 
-    await CategoryModel.findByIdAndDelete({ _id: id });
+    await EventModel.updateMany(
+      { categories: id },
+      { $pull: { categories: id } },
+    );
+    await CategoryModel.findByIdAndDelete(id);
     return res.status(200).json({ msg: "Category eliminada correctamente." });
   } catch (error) {
     console.log(error);

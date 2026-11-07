@@ -52,6 +52,7 @@ const userSchema = new Schema(
       default: "user",
     },
     profile: profileSchema,
+    deletedAt: { type: Date, default: null },
   },
 
   {
