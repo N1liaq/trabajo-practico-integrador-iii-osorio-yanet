@@ -43,16 +43,12 @@ export const getProfile = async (req, res) => {
   try {
     const { id } = req.params;
 
-    if (!mongoose.isValidObjectId(id)) {
-      return res.status(400).json({ msg: "ID inválido" });
-    }
-
     const user = await UserModel.findOne({ _id: id, deletedAt: null }).select(
       "profile",
     );
 
     if (!user) {
-      return res.status(404).json({ msg: "profile no encontrado." });
+      return res.status(404).json({ msg: "User no encontrado." });
     }
 
     return res.status(200).json({ profile: user.profile });
@@ -63,28 +59,23 @@ export const getProfile = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
+    const { id } = req.params;
+
     const { firstName, lastName, birthDate, phone } = req.body;
 
-    const fields = { firstName, lastName, birthDate, phone };
-    const updates = {};
-    for (const [key, value] of Object.entries(fields)) {
-      if (value !== undefined) updates[`profile.${key}`] = value;
-    }
-
-    if (Object.keys(updates).length === 0) {
-      return res
-        .status(400)
-        .json({ msg: "No se enviaron campos para actualizar." });
-    }
-
-    const updatedUser = await UserModel.findOneAndUpdate(
-      { _id: req.user._id, deletedAt: null },
-      { $set: updates },
-      { returnDocument: "after" },
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      { _id: id },
+      {
+        "profile.firstName": firstName,
+        "profile.lastName": lastName,
+        "profile.birthDate": birthDate,
+        "profile.phone": phone,
+      },
+      { returnDocument: "after", runValidators: true },
     );
 
     if (!updatedUser) {
-      return res.status(404).json({ msg: "Profile no encontrado." });
+      return res.status(404).json({ msg: "User no encontrado." });
     }
 
     return res.status(200).json({ data: updatedUser.profile });

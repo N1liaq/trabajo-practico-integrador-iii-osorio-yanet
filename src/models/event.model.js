@@ -43,6 +43,11 @@ const eventSchema = new Schema(
       default: Date.now,
       required: true,
     },
+    capacity: {
+      type: Number,
+      required: true,
+      min: 1,
+    },
     price: {
       type: Number,
       minlength: 0,
