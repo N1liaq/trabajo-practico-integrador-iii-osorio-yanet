@@ -16,7 +16,7 @@ export const getUsersAll = async (req, res) => {
 };
 export const getUserById = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = matchedData(req);
 
     const user = await UserModel.findById({ _id: id, deletedAt: null })
       .select("-password")
@@ -33,9 +33,10 @@ export const getUserById = async (req, res) => {
 };
 export const updateUser = async (req, res) => {
   try {
-    const { id } = req.params;
-
-    const { username, email, password, role, profile } = req.body;
+    const { id } = matchedData(req, { locations: ["params"] });
+    const { username, email, password, role, profile } = matchedData(req, {
+      locations: ["body"],
+    });
 
     const hashedPassword = await hashPassword(password);
 
@@ -63,7 +64,7 @@ export const updateUser = async (req, res) => {
 };
 export const deleteUser = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = matchedData(req);
 
     const user = await UserModel.findOne({ _id: id, deletedAt: null });
 

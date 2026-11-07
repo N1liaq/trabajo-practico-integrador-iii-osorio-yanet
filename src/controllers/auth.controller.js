@@ -5,7 +5,7 @@ import { signToken } from "../helpers/jwt.helper.js";
 
 export const login = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { username, password } = matchedData(req, { locations: ["body"] });
 
     const userExist = await UserModel.findOne({ username });
 
@@ -41,7 +41,7 @@ export const login = async (req, res) => {
 
 export const getProfile = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = matchedData(req, { locations: ["params"] });
 
     const user = await UserModel.findOne({ _id: id, deletedAt: null }).select(
       "profile",
@@ -59,9 +59,10 @@ export const getProfile = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    const { id } = req.params;
-
-    const { firstName, lastName, birthDate, phone } = req.body;
+    const { id } = matchedData(req, { locations: ["params"] });
+    const { firstName, lastName, birthDate, phone } = matchedData(req, {
+      locations: ["body"],
+    });
 
     const updatedUser = await UserModel.findByIdAndUpdate(
       { _id: id },
@@ -86,7 +87,7 @@ export const updateProfile = async (req, res) => {
 
 export const register = async (req, res) => {
   try {
-    const { username, email, password, role, profile } = req.body;
+    const { username, email, password, role, profile } = matchedData(req);
 
     const hashedPassword = await hashPassword(password);
 

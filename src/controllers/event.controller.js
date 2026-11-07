@@ -13,7 +13,7 @@ export const createEvent = async (req, res) => {
       status,
       location,
       categories,
-    } = req.body;
+    } = matchedData(req);
 
     const eventId = new mongoose.Types.ObjectId();
 
@@ -66,7 +66,7 @@ export const getMyEvents = async (req, res) => {
 
 export const getEventById = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = matchedData(req);
 
     const event = await EventModel.findById({ _id: id })
       .populate("organizer", "username email")
@@ -85,8 +85,7 @@ export const getEventById = async (req, res) => {
 
 export const updateEvent = async (req, res) => {
   try {
-    const { id } = req.params;
-
+    const { id } = matchedData(req, { locations: ["params"] });
     const {
       title,
       description,
@@ -97,7 +96,9 @@ export const updateEvent = async (req, res) => {
       status,
       location,
       categories,
-    } = req.body;
+    } = matchedData(req, {
+      locations: ["body"],
+    });
 
     const updatedEvent = await EventModel.findByIdAndUpdate(
       { _id: id },
@@ -128,7 +129,7 @@ export const updateEvent = async (req, res) => {
 
 export const deleteEvent = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = matchedData(req);
 
     const event = await EventModel.findById(id);
 

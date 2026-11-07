@@ -4,7 +4,7 @@ import { EventModel } from "../models/event.model.js";
 
 export const createCategory = async (req, res) => {
   try {
-    const { name, description } = req.body;
+    const { name, description } = matchedData(req);
 
     const categoryId = new mongoose.Types.ObjectId();
 
@@ -34,7 +34,7 @@ export const getCategoriesAll = async (req, res) => {
 };
 export const getCategoryById = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = matchedData(req);
 
     const category = await CategoryModel.findById({ _id: id }).populate(
       "events",
@@ -51,9 +51,10 @@ export const getCategoryById = async (req, res) => {
 };
 export const updateCategory = async (req, res) => {
   try {
-    const { id } = req.params;
-
-    const { name, description } = req.body;
+    const { id } = matchedData(req, { locations: ["params"] });
+    const { name, description } = matchedData(req, {
+      locations: ["body"],
+    });
 
     const updatedCategory = await CategoryModel.findByIdAndUpdate(
       { _id: id },
@@ -76,7 +77,7 @@ export const updateCategory = async (req, res) => {
 };
 export const deleteCategory = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = matchedData(req);
 
     const category = await CategoryModel.findById(id);
 
