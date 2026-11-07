@@ -1,4 +1,4 @@
-import { Model, Schema, Types } from "mongoose";
+import { model, Schema, Types } from "mongoose";
 
 const locationSchema = new Schema(
   {
@@ -8,20 +8,17 @@ const locationSchema = new Schema(
       maxlength: 100,
     },
     address: {
-      type: string,
+      type: String,
       minlength: 5,
       maxlength: 150,
     },
     city: {
-      type: string,
+      type: String,
       minlength: 2,
       maxlength: 50,
     },
   },
-  {
-    versionKey: false,
-    timestamps: true,
-  },
+  { _id: false },
 );
 
 const eventSchema = new Schema(
@@ -56,7 +53,7 @@ const eventSchema = new Schema(
       enum: ["scheduled", "cancelled", "finished"],
       default: "scheduled",
     },
-    location: [locationSchema],
+    location: locationSchema,
     organizer: { type: Types.ObjectId, ref: "User", required: true },
     categories: [{ type: Types.ObjectId, ref: "Category" }],
   },
@@ -66,4 +63,4 @@ const eventSchema = new Schema(
   },
 );
 
-export const EventModel = Model("Event", eventSchema);
+export const EventModel = model("Event", eventSchema);

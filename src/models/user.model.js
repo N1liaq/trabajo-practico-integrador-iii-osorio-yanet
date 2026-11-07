@@ -22,10 +22,7 @@ const profileSchema = new Schema(
       type: String,
     },
   },
-  {
-    versionKey: false,
-    timestamps: true,
-  },
+  { _id: false },
 );
 
 const userSchema = new Schema(
@@ -54,7 +51,7 @@ const userSchema = new Schema(
       enum: ["user", "admin"],
       default: "user",
     },
-    profile: [profileSchema],
+    profile: profileSchema,
   },
 
   {
@@ -62,5 +59,11 @@ const userSchema = new Schema(
     timestamps: true,
   },
 );
+
+userSchema.virtual("events", {
+  ref: "Event",
+  localField: "_id",
+  foreignField: "organizer",
+});
 
 export const UserModel = model("User", userSchema);
