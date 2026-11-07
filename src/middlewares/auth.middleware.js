@@ -11,7 +11,7 @@ export const authMiddleware = async (req, res, next) => {
 
     const decoded = verifyToken(token);
 
-    const user = await UserModel.findById(decoded.id);
+    const user = await UserModel.findById(decoded.user);
 
     if (!user || user.deletedAt) {
       return res.status(401).json({ msg: "Usuario no válido" });

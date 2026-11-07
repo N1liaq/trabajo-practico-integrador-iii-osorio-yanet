@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { comparePassword, hashPassword } from "../helpers/bcript.helper.js";
+import { comparePassword, hashPassword } from "../helpers/bcrypt.helper.js";
 import { UserModel } from "../models/user.model.js";
 import { signToken } from "../helpers/jwt.helper.js";
 
@@ -107,13 +107,12 @@ export const register = async (req, res) => {
         username,
         email,
         password: hashedPassword,
-        addresses,
         role,
         profile,
       },
     ]);
 
-    const createdUser = await UserModel.findById(userId);
+    const createdUser = await UserModel.findById(userId).select("-password");
 
     return res.status(201).json({ data: createdUser });
   } catch (error) {

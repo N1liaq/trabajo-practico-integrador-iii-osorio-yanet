@@ -1,5 +1,29 @@
 import { Model, Schema, Types } from "mongoose";
 
+const locationSchema = new Schema(
+  {
+    venue: {
+      type: String,
+      minlength: 3,
+      maxlength: 100,
+    },
+    address: {
+      type: string,
+      minlength: 5,
+      maxlength: 150,
+    },
+    city: {
+      type: string,
+      minlength: 2,
+      maxlength: 50,
+    },
+  },
+  {
+    versionKey: false,
+    timestamps: true,
+  },
+);
+
 const eventSchema = new Schema(
   {
     title: {
@@ -35,30 +59,6 @@ const eventSchema = new Schema(
     location: [locationSchema],
     organizer: { type: Types.ObjectId, ref: "User", required: true },
     categories: [{ type: Types.ObjectId, ref: "Category" }],
-  },
-  {
-    versionKey: false,
-    timestamps: true,
-  },
-);
-
-const locationSchema = new Schema(
-  {
-    venue: {
-      type: String,
-      minlength: 3,
-      maxlength: 100,
-    },
-    address: {
-      type: string,
-      minlength: 5,
-      maxlength: 150,
-    },
-    city: {
-      type: string,
-      minlength: 2,
-      maxlength: 50,
-    },
   },
   {
     versionKey: false,
